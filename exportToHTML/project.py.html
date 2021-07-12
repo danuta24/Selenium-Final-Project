@@ -1,0 +1,119 @@
+<html>
+<head>
+<title>project.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #808080;}
+.s3 { color: #6a8759;}
+.s4 { color: #6897bb;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+project.py</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">unittest</span>
+<span class="s0">from </span><span class="s1">selenium </span><span class="s0">import </span><span class="s1">webdriver</span>
+<span class="s0">from </span><span class="s1">time </span><span class="s0">import </span><span class="s1">sleep</span>
+<span class="s0">from </span><span class="s1">selenium.webdriver.common.keys </span><span class="s0">import </span><span class="s1">Keys</span>
+
+<span class="s2"># # ### DANE TESTOWE:</span>
+<span class="s1">valid_inputsearch = </span><span class="s3">&quot;woski&quot;</span>
+<span class="s1">valid_inputnosearch = </span><span class="s3">&quot;zestawy prezentowe&quot;</span>
+
+
+<span class="s2"># # Projekt: Danuta Jasińska</span>
+<span class="s2"># # Data utworzenia: 27 maja 2021</span>
+<span class="s2"># # Scenariusz testowy:</span>
+<span class="s2"># # # Wyszukanie poprawnej i niepoprawnej wartości w polu tekstowym SZUKAJ na stronie www.soyalight.pl</span>
+<span class="s0">class </span><span class="s1">SoyaLightInputSearch(unittest.TestCase):</span>
+<span class="s2"># # Warunki wstępne:</span>
+    <span class="s0">def </span><span class="s1">setUp(self):</span>
+<span class="s2">#     # 1. Uruchomiona przeglądarka</span>
+        <span class="s1">self.driver = webdriver.Chrome(executable_path=</span><span class="s3">r&quot;C:\TestFiles\chromedriver.exe&quot;</span><span class="s1">)</span>
+<span class="s2">#     # Maksymalizacja okna</span>
+        <span class="s1">self.driver.maximize_window()</span>
+<span class="s2">#     # 2. Na stronie https://soyalight.pl#/</span>
+        <span class="s1">self.driver.get(</span><span class="s3">&quot;https://soyalight.pl#/&quot;</span><span class="s1">)</span>
+<span class="s2">#</span>
+<span class="s2">#     # Włączenie implicitly wait - mechanizmu czekania na elementy max.30 sekund</span>
+        <span class="s1">self.driver.implicitly_wait(</span><span class="s4">30</span><span class="s1">)</span>
+
+<span class="s2"># # Przejście do inputu Szukaj</span>
+<span class="s2"># # Wypełnienie inputu poprawną wartością</span>
+<span class="s2">#</span>
+    <span class="s0">def </span><span class="s1">testInvalidSearch(self):</span>
+        <span class="s1">driver = self.driver</span>
+        <span class="s1">title = driver.title</span>
+        <span class="s1">print(title)</span>
+        <span class="s1">self.assertEqual(</span><span class="s3">'SoyaLight'</span><span class="s0">, </span><span class="s1">title)</span>
+    <span class="s2"># Weryfikacja strony internetowej, na której przeprowadzone będą testy automatyczne</span>
+
+<span class="s2">#   # Przypadek testowy 001:</span>
+<span class="s2">#         # KROKI:</span>
+<span class="s2">#         # 1. Kliknij w pole tekstowe SZUKAJ</span>
+<span class="s2">#         # Metoda odszuka input Szukaj i wpiszę poprawną wartość</span>
+        <span class="s1">wyszukaj_input = driver.find_element_by_xpath(</span><span class="s3">'//input[@placeholder=&quot;Szukaj&quot;]'</span><span class="s1">)</span>
+        <span class="s1">wyszukaj_input.click()</span>
+<span class="s2">#         # 2. Wpisz poprawną wartość w pole tekstowe SZUKAJ</span>
+<span class="s2">#         # Metoda odszuka napisz Szukaj w polu tekstowym i zwróci poprawną wpisaną wartość</span>
+        <span class="s1">wyszukaj_input.send_keys(valid_inputsearch</span><span class="s0">, </span><span class="s1">Keys.ENTER)</span>
+        <span class="s1">informacja_komunikat = driver.find_element_by_xpath(</span><span class="s3">'//span[text()=&quot;Znaleziono produktów: 1&quot;]'</span><span class="s1">)</span>
+        <span class="s1">informacja_komunikat_tekst =informacja_komunikat.text</span>
+        <span class="s1">self.assertEqual(</span><span class="s3">&quot;Znaleziono produktów: 1&quot;</span><span class="s0">, </span><span class="s1">informacja_komunikat_tekst)</span>
+        <span class="s1">sleep(</span><span class="s4">5</span><span class="s1">)</span>
+    <span class="s2">#3. Przejście do nazwy &quot;woski do kominka&quot;, które przenoszą do podstrony danej oferty sprzedażowej</span>
+    <span class="s2"># Metoda przejścia do produktu zwraca poprawną wartość wpisaną w polu Szukaj</span>
+        <span class="s1">woskidokominka_btn = driver.find_element_by_class_name(</span><span class="s3">&quot;productname&quot;</span><span class="s1">)</span>
+        <span class="s1">woskidokominka_btn.click()</span>
+        <span class="s1">sleep(</span><span class="s4">5</span><span class="s1">)</span>
+    <span class="s2">#4.Iterowanie po liście dostępnych zapachów wosków do kominka</span>
+        <span class="s1">lista_wybierz = driver.find_element_by_id(</span><span class="s3">&quot;option_9&quot;</span><span class="s1">)</span>
+        <span class="s1">lista_wybierz.click()</span>
+    <span class="s2">#5. Wybór wartości z listy Wybierz</span>
+        <span class="s1">zapachywoskow = driver.find_element_by_xpath(</span><span class="s3">'//select[@id=&quot;option_9&quot;]/option[@value=&quot;41&quot;]'</span><span class="s1">)</span>
+        <span class="s1">zapachywoskow.click()</span>
+        <span class="s1">sleep(</span><span class="s4">5</span><span class="s1">)</span>
+    <span class="s2">#6. Naciśnięcie buttona Do koszyka</span>
+    <span class="s2">#Metoda spowoduje,że wybrany produkt o podanym zapachu zostanie dodany do koszyka</span>
+        <span class="s1">dodaniedokoszyka = driver.find_element_by_xpath(</span><span class="s3">'//fieldset[@class=&quot;addtobasket-container&quot;]//button[@type=&quot;submit&quot;]'</span><span class="s1">)</span>
+        <span class="s1">dodaniedokoszyka.click()</span>
+        <span class="s1">informacja_komunikat_dodaniedokoszyka = driver.find_element_by_xpath(</span><span class="s3">'//div[@class=&quot;alert-success alert&quot;]//p'</span><span class="s1">)</span>
+        <span class="s1">self.assertEqual(</span><span class="s3">'Produkt dodany do koszyka.'</span><span class="s0">, </span><span class="s1">informacja_komunikat_dodaniedokoszyka.text)</span>
+        <span class="s1">sleep(</span><span class="s4">5</span><span class="s1">)</span>
+    <span class="s2">#7. Kliknij w pole tekstowe SZUKAJ</span>
+<span class="s2">#   # Metoda odszuka input Szukaj i wpiszę niepoprawną wartość &quot;zestawy prezentowe&quot;</span>
+        <span class="s1">wyszukaj_input_niepoprawnawartosc = driver.find_element_by_xpath(</span><span class="s3">'//input[@placeholder=&quot;Szukaj&quot;]'</span><span class="s1">)</span>
+        <span class="s1">wyszukaj_input_niepoprawnawartosc.click()</span>
+        <span class="s1">sleep(</span><span class="s4">5</span><span class="s1">)</span>
+    <span class="s2">#8. Wpisanie w pole Szukaj niepoprawną wartość</span>
+    <span class="s2">#Metoda wyszuka niepoprawną wartość</span>
+        <span class="s1">wyszukaj_input_niepoprawnawartosc.send_keys(valid_inputnosearch)</span>
+        <span class="s1">buttonlupka = driver.find_element_by_xpath(</span><span class="s3">'//button[@class=&quot;js__search-submit-btn search-btn search__input-area-item btn btn-red search__btn-search r--l-flex r--l-flex-vcenter r--l-flex-hcenter&quot;]'</span><span class="s1">)</span>
+        <span class="s1">buttonlupka.click()</span>
+        <span class="s1">sleep(</span><span class="s4">5</span><span class="s1">)</span>
+        <span class="s1">informacja_komunikat_nieznalezionawartosc = driver.find_element_by_xpath(</span><span class="s3">'//span[text()=&quot;Znaleziono produktów: 0&quot;]'</span><span class="s1">)</span>
+        <span class="s1">informacja_komunikat_nieznalezionawartosc_tekst =informacja_komunikat_nieznalezionawartosc.text</span>
+        <span class="s1">self.assertEqual(</span><span class="s3">'Znaleziono produktów: 0'</span><span class="s0">, </span><span class="s1">informacja_komunikat_nieznalezionawartosc_tekst)</span>
+        <span class="s1">sleep(</span><span class="s4">5</span><span class="s1">)</span>
+
+
+<span class="s2">#    #Oczekiwany rezultat testu: Sprawdzenie czy znajduje poprawną i niepoprawną wartość w polu Search dla strony soyalight.pl</span>
+<span class="s2">#    #Rezultat testu: Poprawnie działająca walidacja, która zwraca komunikat na niebieskim polu</span>
+<span class="s2">#    # Przeniesienie do nowego widoku, który zwraca poprawny komunikat</span>
+<span class="s2"># #</span>
+    <span class="s0">def </span><span class="s1">tearDown(self):</span>
+<span class="s2"># #     # Zakończenie testu</span>
+        <span class="s1">self.driver.quit()</span>
+<span class="s2"># #</span>
+<span class="s2"># # # Jeśli uruchamiamy z tego pliku</span>
+<span class="s0">if </span><span class="s1">__name__ == </span><span class="s3">&quot;__main__&quot;</span><span class="s1">:</span>
+<span class="s2"># #     # Użyjmy metody main(), która zajmie się resztą</span>
+    <span class="s1">unittest.main(verbosity=</span><span class="s4">2</span><span class="s1">)</span>
+</pre>
+</body>
+</html>
